@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-//import java.time.Instant;
+import java.time.Instant;
 
 @Entity
 @Table(name = "tb_client")   
@@ -21,15 +21,15 @@ public class Client implements Serializable {
 	private String name;
 	private String cpf;
 	private Double income;
-	//private Instant birthDate;
-	private String birthDate;
+	private Instant birthDate;
+	//private String birthDate;
 	private Integer children;
 	
 	public Client() {
 		
 	}
 
-	public Client(Long id, String name, String cpf, Double income, String birthDate, Integer children) {
+	public Client(Long id, String name, String cpf, Double income, Instant birthDate, Integer children) {
 		
 		this.id = id;
 		this.name = name;
@@ -71,11 +71,11 @@ public class Client implements Serializable {
 		this.income = income;
 	}
 
-	public String getBirthDate() {
+	public Instant getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Instant birthDate) {
 		this.birthDate = birthDate;
 	}
 
