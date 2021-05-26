@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dsclient.dsclient.dto.ClientDTO;
 import com.dsclient.dsclient.entities.Client;
 import com.dsclient.dsclient.repositories.ClientRepository;
-import com.dsclient.dsclient.services.exceptions.EntityNotFoundException;
-
+import com.dsclient.dsclient.services.exceptions.ResourceNotFoundException;
+import javax.persistence.EntityNotFoundException;
 @Service
 
 public class ClientService {
@@ -25,11 +25,11 @@ public class ClientService {
 		return repository.findAll();
 		
 	}
-	
+	//esse busca do pacote  ds client  - pode dar errro
 	@Transactional (readOnly = true)
 	public ClientDTO findById(Long id) {
 		Optional <Client> obj = repository.findById(id);
-		Client entity = obj.orElseThrow( ()-> new EntityNotFoundException("Entity not found"));
+		Client entity = obj.orElseThrow( ()-> new ResourceNotFoundException("Entity not found"));
 		return new ClientDTO(entity); 
 	}
 	
@@ -44,6 +44,28 @@ public class ClientService {
 		
 		entity = repository.save(entity);
 		return new ClientDTO(entity);
+	}
+	
+	
+	@Transactional 
+	public ClientDTO update(Long id ,ClientDTO dto) {
+		
+		try {
+		Client entity = repository.getOne(id);
+		
+		entity.setName(dto.getName());
+		entity.setCpf(dto.getCpf());
+		entity.setIncome(dto.getIncome());
+		entity.setBirthDate(dto.getBirthDate());
+		entity.setChildren(dto.getChildren());
+		
+		entity = repository.save(entity);
+		return new ClientDTO(entity);
+		}
+		catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not founf" +id);
+		}
+		
 	}
 	
 	
