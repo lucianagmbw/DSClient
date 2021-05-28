@@ -1,6 +1,5 @@
 package com.dsclient.dsclient.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -8,6 +7,8 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,20 +17,22 @@ import com.dsclient.dsclient.entities.Client;
 import com.dsclient.dsclient.repositories.ClientRepository;
 import com.dsclient.dsclient.services.exceptions.DatabaseException;
 import com.dsclient.dsclient.services.exceptions.ResourceNotFoundException;
-@Service
 
+@Service
 public class ClientService {
 	
 	@Autowired
 	private ClientRepository repository;
 	
 	@Transactional (readOnly = true)
-	public List<Client>findAll(){
-		
-		return repository.findAll();
+	public Page<ClientDTO>findAllPaged(PageRequest pageRequest){
+		//clientDTO
+		//return repository.findAll(pageRequest);
+		Page <Client> list = repository.findAll(pageRequest);
+		return list.map( x -> new ClientDTO(x));
 		
 	}
-	//esse busca do pacote  ds client  - pode dar errro
+	//
 	@Transactional (readOnly = true)
 	public ClientDTO findById(Long id) {
 		Optional <Client> obj = repository.findById(id);
